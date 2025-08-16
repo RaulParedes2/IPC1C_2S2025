@@ -204,7 +204,7 @@ public class Practica1_1 {
        //Cambiar el Nombre del Arma
        System.out.println("--------------------------------------------------------------------");
        System.out.print("Nueva Arma(Actual: "+P.Arma+"): ");
-       System.out.println("--------------------------------------------------------------------");
+   
        String Arma = sc.nextLine();
        if(!Arma.isEmpty()) P.Arma = Arma;
        
@@ -233,7 +233,7 @@ public class Practica1_1 {
        //Eliminar un personaje por su id
     
     static void  Eliminarpersonaje (Scanner sc){
-        int id = leerEntero(sc, "Ingrese el ID del Personaje");
+        int id = leerEntero(sc, "Ingrese el ID del Personaje: ");
         for( int i=0; i<numeroPersonajes; i++){
             if(personajes[i].id==id){
                 for(int j=i; j< numeroPersonajes-1;j++){
@@ -242,7 +242,7 @@ public class Practica1_1 {
                 personajes[numeroPersonajes-1]=null;
                 numeroPersonajes--;
                 System.out.println("--------------------------------------------------------------------");
-                System.out.println("Personaje Eliminado");
+                System.out.println("Personaje Eliminado...");
                 System.out.println("--------------------------------------------------------------------");
                 return;
             }
