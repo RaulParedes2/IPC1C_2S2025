@@ -10,4 +10,4 @@ en la septima opcion es para ver el historial de las peleas
 en la octava opcion es para ver los datos del estudianre
 en la novena opcion es para terminar el programa
 
-se podria mejoarar con mas condiciones y con un registro donde salga un ganador
+se podria mejorar con mas condicionales y con un registro donde salga un ganador
