@@ -3,18 +3,105 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package proyecto.pkg1;
-
+//Libreriar importadas, Scanner, LocalDateTime, DateTimeFormatter
+import java.util.Scanner;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 /**
  *
  * @author Daniel Predes
  */
 public class Proyecto1 {
 
-    /**
-     * @param args the command line arguments
-     */
+  
     public static void main(String[] args) {
-        // TODO code application logic here
+       Scanner sc = new Scanner(System.in);
+       int opcion; //Variable opcion decalrada como entero
+       do{
+           MostrarMenu();
+           opcion = leerEntero (sc, "Elige una opcion");
+           
+           // Seleccion de opciones(solo con numero)
+           switch (opcion){
+               
+               case 1: 
+                   AgregarProducto(sc);
+                   break;
+                   
+               case 2: 
+                   BuscarProducto();
+                   break;
+                   
+               case 3:
+                    EliminarProducto(sc);
+                    break;
+                    
+               case 4:
+                   RegistrarVenta(sc);
+                   break;
+                   
+               case 5:
+                   GenerarReporte(sc);
+                   
+               case 6:
+                   VerDatosEstudante();
+                   break;
+                   
+               case 7:
+                   Bitacora();
+                   break;
+                   
+                   //La opcion 8 Escribira Salinedo
+               case 8:
+                   System.out.println("------------------------------------------------------");
+                   System.out.println("Saliendo...");
+                   System.out.println("------------------------------------------------------");
+                   break;
+                   
+                   /*En caso contrario de no escribir en el rango de 1 al 8: 
+                   Escribira Intentelo de Nuevo */
+               default:
+                   System.out.println("------------------------------------------------------");
+                   System.out.println("Intentelo de Nuevo(1 al 8)");
+                   System.out.println("------------------------------------------------------");
+  
+           }
+       }
+       
+       // En caso de seleccionar la Opcion 8 se cerrrara el programa
+       while(opcion !=8);
+       sc.close();
     }
     
+    //Menu que se mostrara en la consola 
+    static void MostrarMenu(){
+        System.out.println("MENU");
+        System.out.println("1. Agergar Produto");
+        System.out.println("2. Buscar Producto");
+        System.out.println("3. Eliminar Producto");
+        System.out.println("4. Registrar Venta");
+        System.out.println("5. Generar Reporte");
+        System.out.println("6. Ver Datos del Estudiante");
+        System.out.println("7. Bitacora");
+        System.out.println("8. SALIR");
+            }
+    
+    // En caso de no escribir un numero Saldra el seguiente mensaje ERROR
+    static int leerEntero(Scanner sc, String mensaje){
+        System.out.print(mensaje);
+        while (!sc.hasNextInt()){
+        System.out.println("--------------------------------------------------------------------");
+        System.out.println("ERROR 'Ingrese un numero'");
+        System.out.println("--------------------------------------------------------------------");
+        sc.next();
+        }
+        return sc.nextInt();
+    }
+    static void VerDatosEstudante(){
+        System.out.println("--------------------------------------------------------------------");
+        System.out.println("Nombre: Raul Jose Daniel Paredes Gonzalez");
+        System.out.println("Carnet:202400554");
+        System.out.println("Curso: IPC1");
+        System.out.println("--------------------------------------------------------------------");
+    }
 }
