@@ -12,8 +12,14 @@ import java.time.format.DateTimeFormatter;
  * @author Daniel Predes
  */
 public class Proyecto1 {
-
-  
+    //Declaracion del tamaño de los vectores
+    static String[]Nombres= new String[100];//Numero Max de nombres
+    static String[]Categoria= new String[100];//Numero Max 
+    static double[] Precio= new double[100];//Numero Max de Precios, con el tipo de dato double(por los decimales)
+    static int[] Cantidad = new int[100];//Numero Max 
+    static  String[] Codigos = new String[100];//Numero Max 
+    static int totalProductos = 0; //El invemtario empieza en 0
+    
     public static void main(String[] args) {
        Scanner sc = new Scanner(System.in);
        int opcion; //Variable opcion decalrada como entero
@@ -75,7 +81,7 @@ public class Proyecto1 {
     
     //Menu que se mostrara en la consola 
     static void MostrarMenu(){
-        System.out.println("MENU");
+        System.out.println("==MENU==");
         System.out.println("1. Agergar Produto");
         System.out.println("2. Buscar Producto");
         System.out.println("3. Eliminar Producto");
@@ -96,6 +102,72 @@ public class Proyecto1 {
         sc.next();
         }
         return sc.nextInt();
+    }
+    
+    static void AgregarProducto(Scanner sc){
+        try{
+           if(totalProductos >= 100){
+               System.out.println("-------------------------------------------------------------");
+               System.out.println("'Inventario Lleno'");
+               System.out.println("-------------------------------------------------------------");
+               return;
+           }
+           sc.nextLine();
+            System.out.println("Nombre del Producto: ");
+            String nombre = sc.nextLine();
+            
+            System.out.println("Categoria(Camisa, Pantalon, Accesorios, etc): ");
+            String categoria = sc.nextLine();
+            
+            System.out.println(" Ingrese el codigo: ");
+            String codigo = sc.nextLine();
+            
+            //Codigo Unico
+            for(int i=0; i<totalProductos; i++){
+                if(Codigos[i].equals(codigo)){
+                    System.out.println("--------------------------------------------------------------------");
+                    System.out.println("'ERROR'(codigo ya existente)");
+                    System.out.println("--------------------------------------------------------------------");
+                    return;
+                }
+            }
+            System.out.println("Precio del producto(Quetzalez):");
+            double precio = sc.nextDouble();
+            
+            //Ingreso de solo valores positivos
+            if(precio <=0){
+                System.out.println("--------------------------------------------------------------------");
+                System.out.println("'ERROR'(Solo numeros Positivos)");
+                System.out.println("--------------------------------------------------------------------");
+                return;
+            }
+            System.out.println("Ingrese la cantidad en Stock: ");
+            int cantidad= sc.nextInt();
+            
+            //Ingreso de valores positivos
+            if(cantidad < 0 ){
+                System.out.println("--------------------------------------------------------------------");
+                System.out.println("'ERROR'(Solo Numeros positivos)");
+                System.out.println("--------------------------------------------------------------------");
+                return;
+            }
+            //Guardar en el inventario(vectores)
+            Nombres[totalProductos]= nombre;
+            Categoria[totalProductos]= categoria;
+            Precio[totalProductos]= precio;
+            Cantidad[totalProductos]= cantidad;
+            Codigos[totalProductos]= codigo;
+            
+            totalProductos++;
+            System.out.println("Producto Agregado");
+        }   
+        
+        catch(Exception e){
+            System.out.println("--------------------------------------------------------------------");
+            System.out.println("'ERROR'(Al agregar el producto): " + e.getMessage());           
+            System.out.println("--------------------------------------------------------------------");
+            sc.nextLine();
+        }
     }
     static void VerDatosEstudante(){
         System.out.println("--------------------------------------------------------------------");
