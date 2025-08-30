@@ -25,7 +25,8 @@ public class Proyecto1 {
        int opcion; //Variable opcion decalrada como entero
        do{
            MostrarMenu();
-           opcion = leerEntero (sc, "Elige una opcion");
+           opcion = leerEntero (sc, "Elige una opcion: ");
+           System.out.println("--------------------------------------------------------------------");
            
            // Seleccion de opciones(solo con numero)
            switch (opcion){
@@ -81,6 +82,7 @@ public class Proyecto1 {
     
     //Menu que se mostrara en la consola 
     static void MostrarMenu(){
+        System.out.println("--------------------------------------------------------------------");
         System.out.println("==MENU==");
         System.out.println("1. Agergar Produto");
         System.out.println("2. Buscar Producto");
@@ -90,6 +92,7 @@ public class Proyecto1 {
         System.out.println("6. Ver Datos del Estudiante");
         System.out.println("7. Bitacora");
         System.out.println("8. SALIR");
+        System.out.println("--------------------------------------------------------------------");
             }
     
     // En caso de no escribir un numero Saldra el seguiente mensaje ERROR
@@ -103,6 +106,10 @@ public class Proyecto1 {
         }
         return sc.nextInt();
     }
+    //---------------------------------------------------------------------------
+    //Agregar Producto
+    //--------------------------------------------------------------------------
+    
     
     static void AgregarProducto(Scanner sc){
         try{
@@ -119,7 +126,7 @@ public class Proyecto1 {
             System.out.println("Categoria(Camisa, Pantalon, Accesorios, etc): ");
             String categoria = sc.nextLine();
             
-            System.out.println(" Ingrese el codigo: ");
+            System.out.println("Ingrese el codigo: ");
             String codigo = sc.nextLine();
             
             //Codigo Unico
@@ -131,7 +138,7 @@ public class Proyecto1 {
                     return;
                 }
             }
-            System.out.println("Precio del producto(Quetzalez):");
+            System.out.println("Precio del producto(Quetzalez): Q ");
             double precio = sc.nextDouble();
             
             //Ingreso de solo valores positivos
@@ -168,12 +175,129 @@ public class Proyecto1 {
             System.out.println("--------------------------------------------------------------------");
             sc.nextLine();
         }
+        
     }
+    
+    static void BuscarProducto(){
+         Scanner sc = new Scanner(System.in);
+
+        try{
+            //Menu de la opcion de buscar Producto
+            System.out.println("==BUSCAR PRODUCTO==");
+            System.out.println("1. Buscar por Nombre");
+            System.out.println("2. Buscar por Codigo");
+            System.out.println("3. Buscar por Categoria");
+            System.out.println("--------------------------------------------------------------------");
+            System.out.println("Elige una opcion: ");
+            
+            int opcion =sc.nextInt();
+            sc.nextLine();
+            
+            boolean encontrado = false; //Defirni la variable encontrado con el tipo de dato boolean
+            
+            switch(opcion){
+            
+                case 1:
+                    System.out.println("Ingrese el Nombre del Producto");
+                    String nomBuscar = sc.nextLine();
+                    
+                    for(int i=0; i<totalProductos; i++){
+                        if(Nombres[i].equalsIgnoreCase(nomBuscar)){
+                            MostrarProducto(i);
+                            encontrado=true;
+                        }
+                    }
+                    break;
+                    
+                case 2:
+                    System.out.println("Ingrese el Codigo del Producto");
+                    String CodBuscar = sc.nextLine();
+                    
+                    for(int i=0; i<totalProductos; i++){
+                        if(Codigos[i].equalsIgnoreCase(CodBuscar)){
+                            MostrarProducto(i);
+                            encontrado=true;
+                        }
+                    }
+                    break;
+                    
+                case 3:
+                       System.out.println("Ingrese la Categoria del Producto");
+                       String catBuscar = sc.nextLine();
+                       
+                       for(int i=0; i<totalProductos; i++){
+                           if(Categoria[i].equalsIgnoreCase(catBuscar)){
+                               MostrarProducto(i);
+                               encontrado=true;
+                           }
+                       }
+                       break;
+                       
+                default:
+                    System.out.println("--------------------------------------------------------------------");
+                    System.out.println("Opcion incorrecta");//Solo numeros ingresados del 1 a 3
+                    System.out.println("--------------------------------------------------------------------");
+        }
+            if(!encontrado){
+                System.out.println("--------------------------------------------------------------------");
+                System.out.println("Producto NO encontrado");//En caso de que el producto sea falso
+                System.out.println("--------------------------------------------------------------------");
+            }
+        }
+        catch(Exception e){
+            System.out.println("--------------------------------------------------------------------");
+            System.out.println("'ERROR' al buscar1: " + e.getMessage());// EL sistema sigue funcionando
+            System.out.println("--------------------------------------------------------------------");
+            
+        }
+  
+    }
+    // Sistema Auxiliar para mostrar los datos
+    static void MostrarProducto (int i){
+        System.out.println("--------------------------------------------------------------------");
+        System.out.println("Nombre: " + Nombres[i]);
+        System.out.println("Categoria: " + Categoria[i]);
+        System.out.println("Codigo: " + Codigos[i]);
+        System.out.println("Precio: Q " + Precio[i]);
+        System.out.println("Cantidad: " + Cantidad[i]);
+        System.out.println("--------------------------------------------------------------------");
+    }
+    //-------------------------------------------------------------------------------------------
+    //Eliminar Producto
+    //-------------------------------------------------------------------------------------------
+    
+    static void EliminarProducto(Scanner sc){
+
+}
+    
+    //-------------------------------------------------------------------------------------------
+    //Registrar Venta
+    //-------------------------------------------------------------------------------------------
+    
+    static void RegistrarVenta(Scanner sc){
+        
+    }
+    
+    //-------------------------------------------------------------------------------------------
+    //Reporte
+    //-------------------------------------------------------------------------------------------
+    
+    static void GenerarReporte(Scanner sc){
+        
+    }
+    
+    //-------------------------------------------------------------------------------------------
+    //Datos del estudianre
+    //-------------------------------------------------------------------------------------------
+    
     static void VerDatosEstudante(){
         System.out.println("--------------------------------------------------------------------");
         System.out.println("Nombre: Raul Jose Daniel Paredes Gonzalez");
         System.out.println("Carnet:202400554");
         System.out.println("Curso: IPC1");
         System.out.println("--------------------------------------------------------------------");
+    }
+    static void Bitacora(){
+        
     }
 }
