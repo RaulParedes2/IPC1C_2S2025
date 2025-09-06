@@ -5,14 +5,30 @@
 package proyecto.pkg1;
 //Libreriar importadas, Scanner, LocalDateTime, DateTimeFormatter
 import java.util.Scanner;
+
+//Librerias para el registro de las ventas
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.IOException;
+import java.io.BufferedReader;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+//Librerias para generar reportes
+//import com.itextpdf.text.Document;
+//import com.itextpdf.text.DocumentException;
+//import com.itextpdf.text.Paragraph;
+//import com.itextpdf.text.pdf.PdfWriter;
+
 /**
  *
  * @author Daniel Predes
  */
 public class Proyecto1 {
+    //------------------------------------------------------------------------
     //Declaracion del tamaño de los vectores
+    //-----------------------------------------------------------------------
     static String[]Nombres= new String[100];//Numero Max de nombres
     static String[]Categoria= new String[100];//Numero Max 
     static double[] Precio= new double[100];//Numero Max de Precios, con el tipo de dato double(por los decimales)
@@ -20,12 +36,22 @@ public class Proyecto1 {
     static  String[] Codigos = new String[100];//Numero Max 
     static int totalProductos = 0; //El invemtario empieza en 0
     
+    //------------------------------------------------------------------------
+    //Declaracion del tamaño de la bitacora
+    //------------------------------------------------------------------------
+    static String[] Historial = new String[200];
+    static int totalHistorial = 0;
+    static final String Archivo_Ventas = "Ventas.txt";
+    //------------------------------------------------------------------------
+    
     public static void main(String[] args) {
        Scanner sc = new Scanner(System.in);
        int opcion; //Variable opcion decalrada como entero
+       
        do{
            MostrarMenu();
            opcion = leerEntero (sc, "Elige una opcion: ");
+           Bitacora("Menu Opcion: " +opcion,(opcion >= 1 && opcion<=8));
            System.out.println("--------------------------------------------------------------------");
            
            // Seleccion de opciones(solo con numero)
@@ -71,7 +97,7 @@ public class Proyecto1 {
                    System.out.println("------------------------------------------------------");
                    System.out.println("Intentelo de Nuevo(1 al 8)");
                    System.out.println("------------------------------------------------------");
-  
+                   Bitacora("MENU | Fuera de rango", false);
            }
        }
        
@@ -102,21 +128,52 @@ public class Proyecto1 {
         System.out.println("--------------------------------------------------------------------");
         System.out.println("ERROR 'Ingrese un numero'");
         System.out.println("--------------------------------------------------------------------");
+        Bitacora("Entrada de validacion incorrecta | Ingreso de un Caracter", false);
         sc.next();
         }
         return sc.nextInt();
     }
+    
+    //--------------------------------------------------------------------------
+    //BItacora
+    //--------------------------------------------------------------------------
+    static void Bitacora(String accion, boolean exito){
+        try{
+            if(totalHistorial < Historial.length){
+                LocalDateTime ahora = LocalDateTime.now();
+                DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+                String estado = exito? "Correcto" : "Error";
+                Historial[totalHistorial]=
+                        ahora.format(formato)+"|"+accion+"|"+estado+"|Usuario: Raul Paredes";
+                totalHistorial++;
+            }
+        }
+        catch(Exception e){
+            System.out.println("ERROR Accion no registrada"+ e.getMessage());
+        }
+    }
+    
+    static void Bitacora(){
+        System.out.println("==BITACORA==");
+        if(totalHistorial==0){
+            System.out.println("No hay registro de Acciones");
+            return;
+        }
+        for(int i= 0; i<totalHistorial; i++){
+            System.out.println(Historial[i]);
+        }
+    }
+    
     //---------------------------------------------------------------------------
     //Agregar Producto
     //--------------------------------------------------------------------------
-    
-    
     static void AgregarProducto(Scanner sc){
         try{
            if(totalProductos >= 100){
                System.out.println("-------------------------------------------------------------");
                System.out.println("'Inventario Lleno'");
                System.out.println("-------------------------------------------------------------");
+               Bitacora("Agregar Producto | Inventario LLeno ", false);
                return;
            }
            sc.nextLine();
@@ -135,27 +192,30 @@ public class Proyecto1 {
                     System.out.println("--------------------------------------------------------------------");
                     System.out.println("'ERROR'(codigo ya existente)");
                     System.out.println("--------------------------------------------------------------------");
+                    Bitacora("Agregar Producto | Codigo Existente", false);
                     return;
                 }
             }
             System.out.println("Precio del producto(Quetzalez): Q ");
             double precio = sc.nextDouble();
             
-            //Ingreso de solo valores positivos
+            //Ingreso de solo valores positivos en precio
             if(precio <=0){
                 System.out.println("--------------------------------------------------------------------");
                 System.out.println("'ERROR'(Solo numeros Positivos)");
                 System.out.println("--------------------------------------------------------------------");
+                Bitacora("Agregar Producto | Numero Negativo ", false);
                 return;
             }
             System.out.println("Ingrese la cantidad en Stock: ");
             int cantidad= sc.nextInt();
             
-            //Ingreso de valores positivos
+            //Ingreso de valores positivos en Stock
             if(cantidad < 0 ){
                 System.out.println("--------------------------------------------------------------------");
                 System.out.println("'ERROR'(Solo Numeros positivos)");
                 System.out.println("--------------------------------------------------------------------");
+                Bitacora("Agregar Producto | Numero negativo", false);
                 return;
             }
             //Guardar en el inventario(vectores)
@@ -167,12 +227,14 @@ public class Proyecto1 {
             
             totalProductos++;
             System.out.println("Producto Agregado");
+            Bitacora("Agregar Producto | Agregado ", true);
         }   
         
         catch(Exception e){
             System.out.println("--------------------------------------------------------------------");
             System.out.println("'ERROR'(Al agregar el producto): " + e.getMessage());           
             System.out.println("--------------------------------------------------------------------");
+            Bitacora("Agregar Producto | ERROR del sistema", false);
             sc.nextLine();
         }
         
@@ -192,6 +254,7 @@ public class Proyecto1 {
             
             int opcion =sc.nextInt();
             sc.nextLine();
+            Bitacora("Menu Buscar Opcion: " +opcion,(opcion >= 1 && opcion <=3));
             
             boolean encontrado = false; //Defirni la variable encontrado con el tipo de dato boolean
             
@@ -237,17 +300,20 @@ public class Proyecto1 {
                     System.out.println("--------------------------------------------------------------------");
                     System.out.println("Opcion incorrecta");//Solo numeros ingresados del 1 a 3
                     System.out.println("--------------------------------------------------------------------");
+                    Bitacora("Buscar Producto | Opcio fuera de rango", false);
         }
             if(!encontrado){
                 System.out.println("--------------------------------------------------------------------");
                 System.out.println("Producto NO encontrado");//En caso de que el producto sea falso
                 System.out.println("--------------------------------------------------------------------");
             }
+            Bitacora("Buscar Producto | Producto No encontrado ", false);
         }
         catch(Exception e){
             System.out.println("--------------------------------------------------------------------");
             System.out.println("'ERROR' al buscar1: " + e.getMessage());// EL sistema sigue funcionando
             System.out.println("--------------------------------------------------------------------");
+            Bitacora("Buscar Producto | ERROR del Sistema ", false);
             
         }
   
@@ -300,11 +366,13 @@ public class Proyecto1 {
                         System.out.println("--------------------------------------------------------------------");
                         System.out.println("Producto 'ELIMINADO'");
                         System.out.println("--------------------------------------------------------------------");
+                        Bitacora("Eliminar Produto | Eliminado", true);
                     }
                     else{
                         System.out.println("--------------------------------------------------------------------");
                         System.out.println("CANCELADO");
                         System.out.println("--------------------------------------------------------------------");
+                        Bitacora("Eliminar Producto | Cancelado ", true);
                     }
                     break;
                 }
@@ -313,10 +381,12 @@ public class Proyecto1 {
                 System.out.println("--------------------------------------------------------------------");
                 System.out.println("El codigo No existe");
                 System.out.println("--------------------------------------------------------------------");
+                Bitacora("Eliminar Producto | Codigo Error", false );
             }
         }
         catch(Exception e){
             System.out.println("ERROR"+e.getMessage());
+            Bitacora("Eliminar Producto | ERROR del Sistema", false);
         }
 }
     
@@ -348,10 +418,4 @@ public class Proyecto1 {
         System.out.println("--------------------------------------------------------------------");
     }
     
-    //-------------------------------------------------------------------------------------------
-    //Bitacora
-    //-------------------------------------------------------------------------------------------
-    static void Bitacora(){
-        
-    }
 }
