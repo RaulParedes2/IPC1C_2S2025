@@ -268,6 +268,56 @@ public class Proyecto1 {
     
     static void EliminarProducto(Scanner sc){
 
+        try{
+            sc.nextLine();
+            System.out.println("Ingrese el codigo del producto: ");
+            String codEliminar = sc.nextLine();
+            
+            // Parte para la eliminacion del producto
+            boolean encontrado = false;
+            
+            for(int i = 0; i <totalProductos; i++){
+                if(Codigos[i].equals(codEliminar)){
+                    encontrado=true;
+                    
+                    //Mensaje de confirmacion
+                    
+                    System.out.println("==Confirmacion de eliminacion si, no (s/n)==");
+                    String Confirmacion=sc.nextLine();
+                    
+                    //Proceso de elminacion
+                    
+                    if(Confirmacion.equalsIgnoreCase("s")){
+                        //Desplazamiento en el vector
+                        for(int j = i; j<totalProductos-1; j++){
+                            Nombres[j] = Nombres[j+1];
+                            Categoria[j] = Categoria[j+1];
+                            Precio[j] = Precio[j+1];
+                            Cantidad[j] = Cantidad[j+1];
+                            Codigos[j] = Codigos[j+1];
+                        }
+                        totalProductos--;
+                        System.out.println("--------------------------------------------------------------------");
+                        System.out.println("Producto 'ELIMINADO'");
+                        System.out.println("--------------------------------------------------------------------");
+                    }
+                    else{
+                        System.out.println("--------------------------------------------------------------------");
+                        System.out.println("CANCELADO");
+                        System.out.println("--------------------------------------------------------------------");
+                    }
+                    break;
+                }
+            }
+            if (!encontrado){
+                System.out.println("--------------------------------------------------------------------");
+                System.out.println("El codigo No existe");
+                System.out.println("--------------------------------------------------------------------");
+            }
+        }
+        catch(Exception e){
+            System.out.println("ERROR"+e.getMessage());
+        }
 }
     
     //-------------------------------------------------------------------------------------------
@@ -297,6 +347,10 @@ public class Proyecto1 {
         System.out.println("Curso: IPC1");
         System.out.println("--------------------------------------------------------------------");
     }
+    
+    //-------------------------------------------------------------------------------------------
+    //Bitacora
+    //-------------------------------------------------------------------------------------------
     static void Bitacora(){
         
     }
