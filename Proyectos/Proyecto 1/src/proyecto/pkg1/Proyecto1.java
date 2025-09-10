@@ -6,7 +6,7 @@ package proyecto.pkg1;
 //Libreriar importadas, Scanner, LocalDateTime, DateTimeFormatter
 
 import java.util.Scanner;
-
+import java.util.*;
 //Librerias para el registro de las ventas
 import java.io.File;
 import java.io.FileWriter;
@@ -18,11 +18,15 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 //Librerias para generar reportes
+// Librerías para reportes (iText 5)
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
-import java.time.format.FormatStyle;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfPCell;
+
+
 
 /**
  *
@@ -81,7 +85,7 @@ public class Proyecto1 {
                     GenerarReporte(sc);
                     break;
                 case 6:
-                    VerDatosEstudante();
+                    VerDatosEstudiante();
                     break;
 
                 case 7:
@@ -481,42 +485,93 @@ public class Proyecto1 {
             doc.open();
 
             if (opcion == 1) {
+                //Reporte de Stock
+                
                 doc.add(new Paragraph("==Reporte Stock=="));
+                doc.add(new Paragraph("Generado: " +
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))));
+                
+                doc.add(new Paragraph(""));
+                
+                //Tabla en el PDF
+                 PdfPTable table = new PdfPTable(5);
+                 table.setWidthPercentage(100);
+                 table.addCell("Codigo");
+                 table.addCell("Nombre");
+                 table.addCell("Categoria");
+                 table.addCell("Precio (Q)");
+                 table.addCell("Cantidad");
+               
+                        
                 for (int i = 0; i < totalProductos; i++) {
-                    doc.add(new Paragraph(Nombres[i] + "|" + Codigos[i] + "|" + Categoria[i]
-                            + "| Q" + Precio[i] + "| Cantidad: " + Cantidad[i]));
+                    table.addCell(Codigos[i]);
+                    table.addCell(Nombres[i]);
+                    table.addCell(Categoria[i]);
+                    table.addCell(String.format("%.2f", Precio[i]));
+                    table.addCell(String.valueOf(Cantidad[i]));
 
                 }
+                doc.add(table);
                 Bitacora("Reporte Stock", true);
+                //Reporte de ventas
             } else {
                 doc.add(new Paragraph("==Reporte Venta=="));
-                File file = new File(Archivo_Ventas);
+                doc.add(new Paragraph("Generado: " +
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))));
+            doc.add(new Paragraph(" ")); 
+            
+            File file = new File(Archivo_Ventas);
 
                 if (file.exists()) {
+                    PdfPTable table = new PdfPTable(5);
+                table.setWidthPercentage(100);
+                table.addCell("Fecha");
+                table.addCell("Código");
+                table.addCell("Producto");
+                table.addCell("Cantidad");
+                table.addCell("Total (Q)");
+
                     Scanner lector = new Scanner(file);
                     while (lector.hasNextLine()) {
-                        doc.add(new Paragraph(lector.nextLine()));
+                    String linea = lector.nextLine();
+                    // Formato esperado: fecha|codigo|nombre| Cantidad: x|Total: Qy
+                    String[] partes = linea.split("\\|");
+                    if (partes.length >= 5) {
+                        String fechaVenta = partes[0];
+                        String codigo = partes[1];
+                        String producto = partes[2];
+                        String cantidad = partes[3].replace("Cantidad:", "").trim();
+                        String total = partes[4].replace("Total:", "").trim();
+
+                        table.addCell(fechaVenta);
+                        table.addCell(codigo);
+                        table.addCell(producto);
+                        table.addCell(cantidad);
+                        table.addCell(total);
                     }
-                    lector.close();
-                } else {
-                    doc.add(new Paragraph("No hay ventas registradas."));
                 }
-                Bitacora("Reporte Venta", true);
+                     lector.close();
+                    doc.add(table);
+                    }
+                   else {
+                doc.add(new Paragraph("No hay ventas registradas."));
             }
+                Bitacora("Reporte Venta", true);
+                } 
             doc.close();
-            System.out.println("Reporte: " + nombreArchivo);
-        } catch (DocumentException | IOException e) {
-            System.out.println("------------------------------------------------------");
-            System.out.println("ERROR al generar el Reporte" + e.getMessage());
-            Bitacora("Generar Reporte | Error del sistema ", false);
-        }
+             System.out.println("Reporte generado: " + nombreArchivo);
+            }catch (DocumentException | IOException e) {
+        System.out.println("------------------------------------------------------");
+        System.out.println("ERROR al generar el Reporte: " + e.getMessage());
+        Bitacora("Generar Reporte | Error del sistema ", false);
+            
 
     }
-
+    }
     //-------------------------------------------------------------------------------------------
     //Datos del estudianre
     //-------------------------------------------------------------------------------------------
-    static void VerDatosEstudante() {
+    static void VerDatosEstudiante(){
         System.out.println("--------------------------------------------------------------------");
         System.out.println("Nombre: Raul Jose Daniel Paredes Gonzalez");
         System.out.println("Carnet:202400554");
