@@ -4,6 +4,7 @@
  */
 package practica2;
 
+//Librerias solicitadas
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -19,30 +20,63 @@ import java.util.Scanner;
  * @author Daniel Predes
  */
 public class Practica2 {
-    public static Personaje[] personajes = new Personaje[50];
-    public static Historial[] historial = new Historial[50];
+    //Declaracion de los vectores y su cantidad
+    //Maximo de personajes 100
+    public static Personaje[] personajes = new Personaje[100];
+    //Max de peleas resgistradas 100
+    public static Historial[] historial = new Historial[100];
+    //El contador de personahes registradas es 0
     public static int contadorPersonajes = 0;
+    //El contador de peleas es dontadorPersone 0
     public static int contadorBatallas = 0;
+    //El ID principal empieza en 1
     public static int idGlobal = 1;
     
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
         int opcion;
-
+        //Opciones en la consola
         do {
             MostrarMenu();
             opcion = leerEntero(sc, "Elige una opcion: ");
 
             switch (opcion) {
-                case 1: AgregarPersonaje(sc); break;
-                case 2: ModificarPersonaje(sc); break;
-                case 3: EliminarPersonaje(sc); break;
-                case 4: VisualizarPersonajes(); break;
-                case 5: Simulacion(sc); break;
-                case 6: HistorialBatallas(); break;
-                case 7: BuscarPersonaje(sc); break;
-                case 8: GuardarCargar(sc); break;
-                case 9: DatosEstudiante(); break;
+                case 1: 
+                    AgregarPersonaje(sc); 
+                    break;
+                    
+                case 2: 
+                    ModificarPersonaje(sc); 
+                    break;
+                    
+                case 3: 
+                    EliminarPersonaje(sc); 
+                    break;
+                    
+                case 4:
+                    VisualizarPersonajes();
+                    break;
+                    
+                case 5:
+                    Simulacion(sc); 
+                    break;
+                    
+                case 6:
+                    HistorialBatallas(); 
+                    break;
+                    
+                case 7: 
+                    BuscarPersonaje(sc); 
+                    break;
+                    
+                case 8: 
+                    GuardarCargar(sc); 
+                    break;
+                    
+                case 9: 
+                    DatosEstudiante(); 
+                    break;
+                    
                 case 10:
                     System.out.println("Saliendo del sistema...");
                     break;
@@ -55,7 +89,7 @@ public class Practica2 {
 
     }
     //-------------------------------------------------------------------------
-    //== MENU ==
+    //== Menu de la consola(no de la interfaz grafica)==
     //-------------------------------------------------------------------------
     static void MostrarMenu() {
         System.out.println("-------------------------------------------");
@@ -63,7 +97,7 @@ public class Practica2 {
         System.out.println("1. Agregar Personaje");
         System.out.println("2. Modificar Personaje");
         System.out.println("3. Eliminar Personaje");
-        System.out.println("4. Visualizar los personajes registrados");
+        System.out.println("4. Visualizar personajes");
         System.out.println("5. Simulacion de batalla");
         System.out.println("6. Ver historial de batallas");
         System.out.println("7. Buscar personaje");
@@ -72,7 +106,7 @@ public class Practica2 {
         System.out.println("10. Salir");
         System.out.println("-------------------------------------------");
     }
-
+    //En caso de escribir un caracter
     static int leerEntero(Scanner sc, String mensaje) {
         int num;
         while (true) {
@@ -85,7 +119,7 @@ public class Practica2 {
             }
         }
     }
-    
+    //Leer el rango de personajes permitidos 
     static int leerRango(Scanner sc, String mensaje, int min, int max) {
         int valor = 0;
         boolean valido = false;
@@ -110,6 +144,7 @@ public class Practica2 {
     //-------------------------------------------------------------------------
     static void AgregarPersonaje(Scanner sc) {
         if (contadorPersonajes >= personajes.length) {
+            //Lectura de la cantidad de personajes que se pueden registrar
             System.out.println("No se pueden agregar mas personajes.");
             return;
         }
@@ -121,7 +156,7 @@ public class Practica2 {
             System.out.print("Nombre: ");
             nombre = sc.nextLine().trim();
             if (nombre.isEmpty()) {
-                System.out.println("El nombre no puede estar vacio.");
+                System.out.println("El nombre no puede estar vacio.");//Mensaje de error 
                 continue;
             }
             boolean repetido = false;
@@ -132,7 +167,7 @@ public class Practica2 {
                 }
             }
             if (!repetido) break;
-            System.out.println("Ese nombre ya existe.");
+            System.out.println("Ese nombre ya existe.");//No se puden dubplicar los nombres
         }
 
         String arma;
@@ -140,9 +175,9 @@ public class Practica2 {
             System.out.print("Arma: ");
             arma = sc.nextLine().trim();
             if (!arma.isEmpty()) break;
-            System.out.println("El arma no puede estar vacia.");
+            System.out.println("El arma no puede estar vacia.");//Mensaje de error
         }
-
+        //Ingreso de los valores restantes solo numeros positivos y en dentro del rango
         int hp = leerRango(sc, "HP (100-500): ", 100, 500);
         int ataque = leerRango(sc, "Ataque (10-100): ", 10, 100);
         int velocidad = leerRango(sc, "Velocidad (1-10): ", 1, 10);
@@ -150,24 +185,25 @@ public class Practica2 {
         int defensa = leerRango(sc, "Defensa (1-50): ", 1, 50);
 
         personajes[contadorPersonajes++] = new Personaje(idGlobal++, nombre, arma, hp, ataque, 
-                velocidad, agilidad, defensa);
+                velocidad, agilidad, defensa);//se agrega un personaje al vector
         
         System.out.println("Personaje agregado exitosamente.");
     }
-    
-    //================ MODIFICAR ==================
+    //-------------------------------------------------------------------------
+    //== Modificar Personajes ==
+    //-------------------------------------------------------------------------
     static void ModificarPersonaje(Scanner sc) {
         System.out.print("Ingrese el nombre o ID del personaje: ");
         String entrada = sc.nextLine().trim();
 
         Personaje p = buscarPorIdONombre(entrada);
         if (p == null) {
-            System.out.println("No se encontro el personaje.");
+            System.out.println("No se encontro el personaje.");//Mensaje de error
             return;
         }
 
         System.out.println("Editando a: " + p.nombre);
-        System.out.print("Nueva arma (" + p.arma + "): ");
+        System.out.print("Nueva arma (" + p.arma + "): ");//Empiza la edicion apartir del arma
         String arma = sc.nextLine().trim();
         if (!arma.isEmpty()) p.arma = arma;
 
@@ -179,8 +215,9 @@ public class Practica2 {
 
         System.out.println("Personaje modificado exitosamente.");
     }
-
-    //================ ELIMINAR ==================
+    //-------------------------------------------------------------------------
+    //== Eliminar Personaje==
+    //-------------------------------------------------------------------------
     static void EliminarPersonaje(Scanner sc) {
         System.out.print("Ingrese nombre o ID del personaje a eliminar: ");
         String entrada = sc.nextLine().trim();
@@ -189,17 +226,19 @@ public class Practica2 {
             System.out.println("No se encontro el personaje.");
             return;
         }
-        System.out.print("¿Seguro que desea eliminarlo? (s/n): ");
+        System.out.print("¿Seguro que desea eliminarlo? (s/n): ");//Mensaje de confirmacion
         if (sc.nextLine().trim().equalsIgnoreCase("s")) {
-            for (int i = index; i < contadorPersonajes - 1; i++) {
+            for (int i = index; i < contadorPersonajes - 1; i++) {//resta del vector y desplaza los personajes
                 personajes[i] = personajes[i + 1];
             }
             contadorPersonajes--;
             System.out.println("Personaje eliminado.");
         }
     }
-
-    //================ VISUALIZAR ==================
+    
+    //-------------------------------------------------------------------------
+    //==Visualizar Personajes==
+    //-------------------------------------------------------------------------
     static void VisualizarPersonajes() {
         System.out.println("=== Personajes Registrados ===");
         
@@ -213,11 +252,14 @@ public class Practica2 {
                     p.id, p.nombre, p.arma, p.hp, p.ataque, p.defensa, p.velocidad, p.agilidad);
         }
     }
-
-    //================ SIMULACION ==================
+    
+    //-------------------------------------------------------------------------
+    //==Simulacion==
+    //-------------------------------------------------------------------------
+    
     static void Simulacion(Scanner sc) {
         if (contadorPersonajes < 2) {
-            System.out.println("Se necesitan al menos 2 personajes.");
+            System.out.println("Se necesitan al menos 2 personajes.");//Validacion de cantidad de personajes registrados
             return;
         }
         VisualizarPersonajes();
@@ -227,7 +269,7 @@ public class Practica2 {
         Personaje p2 = buscarPorIdONombre(sc.nextLine().trim());
 
         if (p1 == null || p2 == null || p1 == p2) {
-            System.out.println("Personajes invalidos.");
+            System.out.println("Personajes invalidos.");//Validacion que los personahes no sean iguales
             return;
         }
         
@@ -236,7 +278,9 @@ public class Practica2 {
         System.out.println("Uno o ambos personajes no están vivos. No se puede iniciar la batalla.");
         return;
     }
-
+        
+        //Inicio de la batalla pokemon
+        
         p1.batallas++;
         p2.batallas++;
 
@@ -280,8 +324,9 @@ public class Practica2 {
             }
         }
     }
-
-    //================ HISTORIAL ==================
+    //--------------------------------------------------------------------------
+    //==Historila de Peleas==
+    //--------------------------------------------------------------------------
     static void HistorialBatallas() {
         System.out.println("=== Historial de Batallas ===");
         
@@ -296,8 +341,9 @@ public class Practica2 {
                     h.id, h.fecha, h.participante1, h.participante2, h.ganador);
         }
     }
-
-    //================ BUSCAR ==================
+    //-------------------------------------------------------------------------
+    //==Buscar Personaje==
+    //-------------------------------------------------------------------------
     static void BuscarPersonaje(Scanner sc) {
         System.out.print("Ingrese nombre o ID del personaje: ");
         String entrada = sc.nextLine().trim();
@@ -309,9 +355,12 @@ public class Practica2 {
         System.out.printf("[%d] %s | Arma: %s | HP: %d | Atk: %d | Def: %d | Vel: %d | Agi: %d | Batallas: %d | Ganadas: %d | Perdidas: %d\n",
                 p.id, p.nombre, p.arma, p.hp, p.ataque, p.defensa, p.velocidad, p.agilidad, p.batallas, p.ganadas, p.perdidas);
     }
+    //--------------------------------------------------------------------------
+    //== Cargar y guardar==
+    //--------------------------------------------------------------------------
     
-    //================ GUARDAR/CARGAR ==================
     static void GuardarCargar(Scanner sc) {
+        //Menu de cargar y guardar en consola
         System.out.println("1. Guardar estado");
         System.out.println("2. Cargar estado");
         int opcion = leerEntero(sc, "Elige una opcion: ");
@@ -326,29 +375,29 @@ public class Practica2 {
     }
 
     static void guardarEnArchivo() {
-        try (PrintWriter pw = new PrintWriter(new FileWriter("arenausac.txt"))) {
+        try (PrintWriter pw = new PrintWriter(new FileWriter("arena.txt"))) {//Se agaurda en en archivo plano txt
             pw.println("[PERSONAJES]");
             for (int i = 0; i < contadorPersonajes; i++) {
                 Personaje p = personajes[i];
-                pw.printf("%d;%s;%s;%d;%d;%d;%d;%d;%d;%d;%d\n",
+                pw.printf("%d;%s;%s;%d;%d;%d;%d;%d;%d;%d;%d\n",// de la forma id,nombre,hp,ataque,velocidad,agilidad,defensa, batllas, ganadas,perdidas
                         p.id, p.nombre, p.arma, p.hp, p.ataque, p.velocidad, p.agilidad, p.defensa,
                         p.batallas, p.ganadas, p.perdidas);
             }
-            pw.println("[HISTORIAL]");
+            pw.println("[HISTORIAL]");//Historial agurda de la siguientes manera
             for (int i = 0; i < contadorBatallas; i++) {
-                Historial h = historial[i];
+                Historial h = historial[i];//id,fecha,Personaje1, personaje 2 y el gandors
                 pw.printf("%d;%s;%s;%s;%s\n", h.id, h.fecha, h.participante1, h.participante2, h.ganador);
             }
-            System.out.println("Datos guardados en arenausac.txt");
+            System.out.println("Datos guardados en arena.txt");
         } catch (IOException e) {
             System.out.println("Error al guardar: " + e.getMessage());
         }
     }
 
     static void cargarDesdeArchivo() {
-        File archivo = new File("arenausac.txt");
+        File archivo = new File("arena.txt");//Carga de archivo plano
         if (!archivo.exists()) {
-            System.out.println("No existe archivo para cargar.");
+            System.out.println("No existe archivo para cargar.");//verificacion de acrhivos
             return;
         }
 
@@ -395,18 +444,22 @@ public class Practica2 {
                 }
             }
 
-            System.out.println("Datos cargados desde arenausac.txt");
+            System.out.println("Datos cargados desde arena.txt");
         } catch (IOException e) {
             System.out.println("Error al cargar: " + e.getMessage());
         }
     }
-    //================ DATOS ==================
+    //--------------------------------------------------------------------------
+    //==Datos del Estudiante==
+    //-------------------------------------------------------------------------
     static void DatosEstudiante() {
         System.out.println("Nombre: Raul Jose Daniel Paredes Gonzalez");
         System.out.println("Carnet: 202400554");
         System.out.println("Curso: IPC1");
     }
-    //================ AUXILIARES ==================
+    //--------------------------------------------------------------------------
+    //==Auxilires
+    //--------------------------------------------------------------------------
     static Personaje buscarPorIdONombre(String entrada) {
         try {
             int id = Integer.parseInt(entrada);

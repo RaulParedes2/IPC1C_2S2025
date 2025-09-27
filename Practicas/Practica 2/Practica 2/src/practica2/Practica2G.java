@@ -14,29 +14,31 @@ import java.awt.*;
  *
  * @author Daniel Predes
  */
+//parte logica de la interfaz grafica
 public class Practica2G {
     //-------------------------------------------------------------------------
     //==Agregar Personaje==
     //-------------------------------------------------------------------------
     public static void AgregarPersonajeConDialog(Component parent) {
-        try {
+        try {   
             String nombre = JOptionPane.showInputDialog(parent, "Nombre del personaje:");
-            if (nombre == null || nombre.trim().isEmpty()) {
+            if (nombre == null || nombre.trim().isEmpty()) { // si el Nombre esta vacio no resgistrar personaje
                 return;
             }
 
             String arma = JOptionPane.showInputDialog(parent, "Arma del personaje:");
             if (arma == null || arma.trim().isEmpty()) {
-                return;
+                return;// si el Arma esta vacia no registrar personaje
             }
-
+            
+            //No permite la entrada de datos vacios, fuera de rango o caracteres
             int hp = leerRangoDialog("HP (100-500):", 100, 500);
             int ataque = leerRangoDialog("Ataque (10-100):", 10, 100);
             int velocidad = leerRangoDialog("Velocidad (1-10):", 1, 10);
             int agilidad = leerRangoDialog("Agilidad (1-10):", 1, 10);
             int defensa = leerRangoDialog("Defensa (1-50):", 1, 50);
 
-            Practica2.personajes[Practica2.contadorPersonajes++]
+            Practica2.personajes[Practica2.contadorPersonajes++]//Agergar personajes al contadors de persoajes
                     = new Personaje(Practica2.idGlobal++, nombre, arma, hp, ataque, velocidad, agilidad, defensa);
 
             JOptionPane.showMessageDialog(parent, "Personaje agregado exitosamente.");
@@ -50,22 +52,22 @@ public class Practica2G {
     //------------------------------------------------------------------------
 
     public static void ModificarPersonajeConDialog(Component parent) {
-        String entrada = JOptionPane.showInputDialog(parent, "Ingrese nombre o ID del personaje:");
+        String entrada = JOptionPane.showInputDialog(parent, "Ingrese nombre o ID del personaje:");//Ingrso de nombres o ID
         if (entrada == null || entrada.trim().isEmpty()) {
             return;
         }
 
         Personaje p = Practica2.buscarPorIdONombre(entrada.trim());
         if (p == null) {
-            JOptionPane.showMessageDialog(parent, "No se encontro el personaje.");
+            JOptionPane.showMessageDialog(parent, "No se encontro el personaje.");//De los contrario 
             return;
         }
-
+        //La modificacion empieza apartir del arma
         String arma = JOptionPane.showInputDialog(parent, "Nueva arma (" + p.arma + "):");
         if (arma != null && !arma.trim().isEmpty()) {
             p.arma = arma;
         }
-
+        //Seguido de los demas
         p.hp = leerRangoDialog("HP (100-500):", 100, 500);
         p.ataque = leerRangoDialog("Ataque (10-100):", 10, 100);
         p.velocidad = leerRangoDialog("Velocidad (1-10):", 1, 10);
@@ -79,17 +81,17 @@ public class Practica2G {
     //------------------------------------------------------------------------
 
     public static void EliminarPersonajeConDialog(Component parent) {
-        String entrada = JOptionPane.showInputDialog(parent, "Ingrese nombre o ID:");
+        String entrada = JOptionPane.showInputDialog(parent, "Ingrese nombre o ID:");// Ingreso de Nombre o ID
         if (entrada == null || entrada.trim().isEmpty()) {
             return;
         }
 
         int index = Practica2.buscarIndice(entrada.trim());
         if (index == -1) {
-            JOptionPane.showMessageDialog(parent, "No se encontro el personaje.");
+            JOptionPane.showMessageDialog(parent, "No se encontro el personaje.");//De los contrario
             return;
         }
-
+        //Mensaje de confirmacion de eliminacion
         int confirm = JOptionPane.showConfirmDialog(parent, "¿Seguro que desea eliminarlo?", "Confirmar", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             for (int i = index; i < Practica2.contadorPersonajes - 1; i++) {
@@ -222,10 +224,10 @@ public class Practica2G {
 
         if (opcion == 0) {
             guardarEnArchivo();
-            JOptionPane.showMessageDialog(parent, "Datos guardados en arenausac.txt");
+            JOptionPane.showMessageDialog(parent, "Datos guardados en arena.txt");
         } else if (opcion == 1) {
             cargarDesdeArchivo();
-            JOptionPane.showMessageDialog(parent, "Datos cargados desde arenausac.txt");
+            JOptionPane.showMessageDialog(parent, "Datos cargados desde arena.txt");
         }
     }
 
@@ -245,7 +247,7 @@ public class Practica2G {
         while (true) {
             String input = JOptionPane.showInputDialog(mensaje);
             if (input == null) {
-                throw new RuntimeException("Operación cancelada.");
+                throw new RuntimeException("Operación cancelada.");//en caso de cancelar la operacion en curso
             }
             try {
                 int valor = Integer.parseInt(input.trim());
@@ -253,7 +255,7 @@ public class Practica2G {
                     return valor;
                 }
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Debe ingresar un número válido.");
+                JOptionPane.showMessageDialog(null, "Debe ingresar un número válido.");//Ingreso de caracteres
             }
         }
     }

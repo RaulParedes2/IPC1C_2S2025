@@ -8,6 +8,7 @@ package practica2;
  *
  * @author Daniel Predes
  */
+//Clase hija personaje
 public class Personaje {
     int id;
     String nombre;
@@ -21,6 +22,7 @@ public class Personaje {
     int ganadas;
     int perdidas;
     
+    //Constructor de la clase hija
     public Personaje(int id, String nombre, String arma, int hp, int ataque, 
             int velocidad, int agilidad, int defensa){
         

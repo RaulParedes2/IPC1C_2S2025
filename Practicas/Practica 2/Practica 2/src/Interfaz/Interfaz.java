@@ -11,11 +11,14 @@ import practica2.Practica2G;
  * @author Daniel Predes
  */
 public class Interfaz extends JFrame{
+    
+    //Interfaz del menu y sus botones
+    
     public Interfaz() {
         super("Menú");
     setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
-
+//Nombre de los botenes del menu
         JButton btnAgregar = new JButton("Agregar Personaje");
         JButton btnModificar = new JButton("Modificar Personaje");
         JButton btnEliminar = new JButton("Eliminar Personaje");
@@ -26,6 +29,8 @@ public class Interfaz extends JFrame{
         JButton btnCargarGuardar = new JButton("Cargar/Guardar");
         JButton btnDatos = new JButton("Datos del Estudiante");
         JButton btnSalir = new JButton("Volver");
+        
+        //Agregar los botenes al panel del menu
 
         JPanel panel = new JPanel(new GridLayout(10, 2, 15, 15));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -43,7 +48,8 @@ public class Interfaz extends JFrame{
         setContentPane(panel);
         pack();
         setLocationRelativeTo(null);
-
+        
+        //Llamada de los constructures de la logica de los botnes
         btnAgregar.addActionListener(e -> Practica2G.AgregarPersonajeConDialog(this));
         btnModificar.addActionListener(e -> Practica2G.ModificarPersonajeConDialog(this));
         btnEliminar.addActionListener(e -> Practica2G.EliminarPersonajeConDialog(this));

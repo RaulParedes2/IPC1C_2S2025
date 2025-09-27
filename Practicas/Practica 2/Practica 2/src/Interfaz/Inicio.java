@@ -11,32 +11,35 @@ import java.awt.*;
  * @author Daniel Predes
  */
 public class Inicio extends JFrame {
-    private final JButton btnAbrir = new JButton("Abrir ArenaUSAC");
+    //Menu o pantalla de inicio
+    private final JButton btnAbrir = new JButton("Abrir Menu");
     private final JButton btnSalir = new JButton("Salir");
 
+    //Nombre de la pantalla principal
     public Inicio() {
-        super("ArenaUSAC");
+        super("Practica 2");
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
 
-        JLabel titulo = new JLabel("ArenaUSAC", SwingConstants.CENTER);
+        JLabel titulo = new JLabel("Practica 2", SwingConstants.CENTER);
         titulo.setFont(titulo.getFont().deriveFont(Font.BOLD, 18f));
 
         JPanel centro = new JPanel(new GridLayout(2, 1, 10, 10));
-        centro.add(btnAbrir);
-        centro.add(btnSalir);
+        centro.add(btnAbrir);//Boton del Menu
+        centro.add(btnSalir);//Boton de salir
 
         JPanel root = new JPanel(new BorderLayout(10, 10));
         root.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         root.add(titulo, BorderLayout.NORTH);
-        root.add(new JLabel("Simulación de batallas con personajes.", SwingConstants.CENTER), BorderLayout.CENTER);
+        root.add(new JLabel("Simulación de batallas con personajes.", SwingConstants.CENTER), BorderLayout.CENTER);//Titulo
         root.add(centro, BorderLayout.SOUTH);
 
         setContentPane(root);
         pack();
         setLocationRelativeTo(null);
-
+        
+        //Botones 
         btnAbrir.addActionListener(e -> {
             new Interfaz().setVisible(true);
             dispose();
