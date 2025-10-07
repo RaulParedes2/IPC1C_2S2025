@@ -1,0 +1,1 @@
+El Siguiente Programa es para el registro del sistema de inventario de una tienda 
