@@ -4,10 +4,14 @@
  */
 package Ejecucion;
 
+import Visualizacion.MenuPrincipal;
 /**
  *
  * @author Daniel Predes
  */
 public class SanCarlistaShop {
+    public static void main(String[] args){
+        
+    }
     
 }

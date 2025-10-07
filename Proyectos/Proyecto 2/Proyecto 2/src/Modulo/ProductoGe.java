@@ -8,6 +8,16 @@ package Modulo;
  *
  * @author Daniel Predes
  */
-public class ProductoGe {
+public class ProductoGe extends Producto {
+    private String material;
     
+    public ProductoGe(String codigo, String nombre, String material, int stock){
+        super(codigo, nombre, "General", stock);
+        this.material=material;
+    }
+    
+    @Override
+    public String getDetalle(){
+        return "Material "+material;
+    }
 }
