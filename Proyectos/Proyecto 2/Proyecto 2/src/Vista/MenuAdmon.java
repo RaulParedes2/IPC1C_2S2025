@@ -17,15 +17,18 @@ public class MenuAdmon extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        JButton btnReportes = new JButton("Ver Reportes");
         JButton btnProductos = new JButton("Gestionar Productos");
         JButton btnVendedores = new JButton("Gestionar Vendedores");
         JButton btnSalir = new JButton("Cerrar Sesión");
 
+        btnReportes.addActionListener(e -> new VentanaReportes().setVisible(true));
         btnProductos.addActionListener(e -> new VentanaProductos().setVisible(true));
         btnVendedores.addActionListener(e -> new VentanaVendedores().setVisible(true));
         btnSalir.addActionListener(e -> { dispose(); new LoginFrame().setVisible(true); });
 
         setLayout(new GridLayout(3, 1, 10, 10));
+        add(btnReportes);
         add(btnProductos);
         add(btnVendedores);
         add(btnSalir);

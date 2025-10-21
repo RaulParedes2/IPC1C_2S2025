@@ -4,10 +4,33 @@
  */
 package Vista;
 
-/**
- *
- * @author Daniel Predes
- */
-public class MenuCliente {
-    
+import Modelo.*;
+import javax.swing.*;
+import java.awt.*;
+
+public class MenuCliente extends JFrame {
+
+    private Cliente cliente;
+
+    public MenuCliente(Cliente c) {
+        this.cliente = c;
+
+        setTitle("Panel del Cliente - " + cliente.getNombre());
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        JButton btnVerProductos = new JButton("Ver Productos");
+        JButton btnMisPedidos = new JButton("Mis Pedidos");
+        JButton btnSalir = new JButton("Cerrar Sesión");
+
+        btnVerProductos.addActionListener(e -> new VentanaCatalogo(cliente).setVisible(true));
+        btnMisPedidos.addActionListener(e -> new VentanaPedidosCliente(cliente).setVisible(true));
+        btnSalir.addActionListener(e -> { dispose(); new LoginFrame().setVisible(true); });
+
+        setLayout(new GridLayout(3, 1, 10, 10));
+        add(btnVerProductos);
+        add(btnMisPedidos);
+        add(btnSalir);
+    }
 }

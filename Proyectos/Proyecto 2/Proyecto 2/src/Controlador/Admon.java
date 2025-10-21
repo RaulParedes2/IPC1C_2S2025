@@ -20,10 +20,10 @@ public class Admon {
     public static void crearVendedor(String codigo, String nombre, String genero, String password){
         if(buscarVendedor(codigo)==null){
              vendedores[contadorVendedores++] = new Vendedores(codigo, nombre, genero, password);
-            System.out.println("[OK] Vendedor " + nombre + " creado correctamente.");
+            System.out.println("Vendedor " + nombre + " creado correctamente.");
         }
         else{
-            System.out.println("ERRO- codigo de vendedor existente");
+            System.out.println("codigo de vendedor existente");
         }
     }
     
