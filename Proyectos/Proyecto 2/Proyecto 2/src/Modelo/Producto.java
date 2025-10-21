@@ -10,15 +10,17 @@ import java.io.Serializable;
  * @author Daniel Predes
  */
 public abstract class Producto implements Serializable {
-    protected String codigo;
-    protected String nombre;
-    protected String categoria;
-    protected int stock;
+    private String codigo;
+    private String nombre;
+    private String categoria;
+    private String atributo;
+    private int stock;
     
-    public Producto(String codigo, String nombre, String categoria, int stock){
+    public Producto(String codigo, String nombre, String categoria, String atributo, int stock){
         this.codigo=codigo;
         this.nombre=nombre;
         this.categoria=categoria;
+        this.atributo=atributo;
         this.stock= stock;
     }
     public abstract String getDetalle();
@@ -33,12 +35,20 @@ public abstract class Producto implements Serializable {
         return categoria;
     }
     
+    public String getAtributo(){
+        return atributo;
+    }
+    
     public int getStock(){
         return stock;
     }
     //--------------------------------------------------------------------------
     public void setNombre(String nombre) {
         this.nombre = nombre; }
+    public void setCategoria(String categoria) {
+        this.categoria = categoria; }
+    public void setAtributo(String atributo) {
+        this.atributo = atributo; }
     public void setStock(int stock) { 
         this.stock = stock; }
     //-------------------------------------------------------------------------

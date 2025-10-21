@@ -202,14 +202,14 @@ public class VentanaVendedores extends JFrame {
     //==== Boton de cargar desde CSV ======
     
     private void cargarCSV() {
-        File archivo = new File("src/data/vendedores.ser");
+        File archivo = new File("src/data/vendedores.csv");
     int cargados = 0, errores = 0;
 
         try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
             String linea;
             while ((linea = br.readLine()) != null) {
                 String[] partes = linea.split(",");
-                if (partes.length != 4) {
+                if (partes.length < 4|| partes.length >5) {
                     errores++;
                     continue;
                 }
@@ -218,13 +218,25 @@ public class VentanaVendedores extends JFrame {
                 String nombre = partes[1].trim();
                 String genero = partes[2].trim();
                 String password = partes[3].trim();
-
+                int ventas=0;
+                
+                if(partes.length==5){
+                    try{
+                        ventas= Integer.parseInt(partes[4].trim());
+                        if(ventas<0) ventas=0;
+                    }catch(NumberFormatException e){
+                        ventas=0;
+                    }
+                }
+                
                 if (Vendedor.buscarVendedor(codigo) != null) {
                     errores++;
                     continue;
                 }
 
                 Vendedores v = new Vendedores(codigo, nombre, genero, password);
+                for(int i=0; i<ventas;i++) v.confirmarVenta();
+                Vendedor.crearVendedor(v);
                 Vendedor.crearVendedor(v);
                 cargados++;
             }
@@ -239,7 +251,7 @@ public class VentanaVendedores extends JFrame {
     
     //====== Gurdar los datos con CSV========
      private void guardarCSV() {
-        File archivo = new File("src/data/vendedores.ser");
+        File archivo = new File("src/data/vendedores.csv");
 
         try (PrintWriter pw = new PrintWriter(new FileWriter(archivo))) {
             Vendedores[] lista = Vendedor.getVendedores();
@@ -248,7 +260,7 @@ public class VentanaVendedores extends JFrame {
             for (int i = 0; i < total; i++) {
                 Vendedores v = lista[i];
                 pw.println(v.getCodigo() + "," + v.getNombre() + "," +
-                           v.getgenero() + "," + v.getPassword());
+                           v.getgenero() + "," + v.getPassword()+","+v.getVentasCofirmadas());
             }
 
             JOptionPane.showMessageDialog(this, "Archivo CSV guardado correctamente.");

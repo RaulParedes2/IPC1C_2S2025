@@ -10,8 +10,8 @@ import java.time.format.DateTimeFormatter;
 public class ProductoAl extends Producto {
     private LocalDate fechaCaducidad;
 
-    public ProductoAl(String codigo, String nombre, LocalDate fechaCaducidad, int stock) {
-        super(codigo, nombre, "Alimento", stock);
+    public ProductoAl(String codigo, String nombre, LocalDate fechaCaducidad, String atributo,int stock) {
+        super(codigo, nombre, "Alimento",atributo, stock);
         this.fechaCaducidad = fechaCaducidad;
     }
 

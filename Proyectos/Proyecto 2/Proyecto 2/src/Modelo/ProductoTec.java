@@ -11,8 +11,8 @@ package Modelo;
 public class ProductoTec extends Producto {
     private int mesesGarantia;
     
-    public ProductoTec(String codigo, String nombre, int mesesGarantia, int stock){
-        super(codigo, nombre,"Tecnologia",stock);
+    public ProductoTec(String codigo, String nombre, int mesesGarantia,String atributo, int stock){
+        super(codigo, nombre,"Tecnologia",atributo,stock);
         this.mesesGarantia=mesesGarantia;
     }
     
