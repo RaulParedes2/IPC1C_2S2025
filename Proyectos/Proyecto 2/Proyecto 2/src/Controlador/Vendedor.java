@@ -4,28 +4,36 @@
  */
 package Controlador;
 
+import Modelo.Producto;
 import Modelo.Vendedores;
-/**
- *
- * @author Daniel Predes
- */
+
 public class Vendedor {
-    
-     private static Vendedores[] vendedores = new Vendedores[100];
-     private static int contadorVendedores = 0;
-    
-   public static void crearVendedor(Vendedores v) {
-        if (buscarVendedor(v.getCodigo()) == null) {
-            vendedores[contadorVendedores++] = v;
-            System.out.println("Vendedor " + v.getNombre() + " creado correctamente.");
+
+    // ===============================================================
+    // ARREGLOS Y CONTADORES
+    // ===============================================================
+    private static final int MAX_VENDEDORES = 100;
+    private static final int MAX_PRODUCTOS = 200;
+
+    private static Vendedores[] vendedores = new Vendedores[MAX_VENDEDORES];
+    private static Producto[] productos = new Producto[MAX_PRODUCTOS];
+
+    private static int contadorVendedores = 0;
+    private static int contadorProductos = 0;
+
+    // ===============================================================
+    // GESTIÓN DE VENDEDORES
+    // ===============================================================
+
+    public static void crearVendedor(Vendedores nuevo) {
+        if (buscarVendedor(nuevo.getCodigo()) == null) {
+            vendedores[contadorVendedores++] = nuevo;
+            System.out.println("[OK] Vendedor " + nuevo.getNombre() + " creado correctamente.");
         } else {
             System.out.println("Código de vendedor duplicado.");
         }
     }
-   //-------------------------------------------------------------------------------
-   //Buscar vendedor
-   //--------------------------------------------------------------------------------
-   
+
     public static Vendedores buscarVendedor(String codigo) {
         for (int i = 0; i < contadorVendedores; i++) {
             if (vendedores[i] != null && vendedores[i].getCodigo().equalsIgnoreCase(codigo)) {
@@ -34,64 +42,109 @@ public class Vendedor {
         }
         return null;
     }
-    //--------------------------------------------------------------------------------
-    //Modificar vendedor
-    //------------------------------------------------------------------------------
-    
-    public static void actualizarVendedor(String codigo, String nuevoNombre, String nuevaPassword) {
-        Vendedores v = buscarVendedor(codigo);
-        if (v != null) {
-            v.setNombre(nuevoNombre);
-            v.setPassword(nuevaPassword);
-            System.out.println("Vendedor actualizado correctamente.");
-        } else {
-            System.out.println("No se encontró el vendedor con código " + codigo);
-        }
-    }
-    //----------------------------------------------------------------------------
-    //Eliminar vendedor 
-    //----------------------------------------------------------------------------
-    
-     public static void eliminarVendedor(String codigo) {
+
+    public static void eliminarVendedor(String codigo) {
         for (int i = 0; i < contadorVendedores; i++) {
             if (vendedores[i] != null && vendedores[i].getCodigo().equalsIgnoreCase(codigo)) {
-                for (int j = i; j < contadorVendedores - 1; j++) {      //Reordenar la lista
-                    vendedores[j] = vendedores[j + 1];
-                }
-                vendedores[--contadorVendedores] = null;
-                System.out.println("Vendedor eliminado");
+                vendedores[i] = vendedores[contadorVendedores - 1];
+                vendedores[contadorVendedores - 1] = null;
+                contadorVendedores--;
+                System.out.println("[OK] Vendedor eliminado correctamente.");
                 return;
             }
         }
-        System.out.println("Vendedor no encontrado.");
+        System.out.println("[ERROR] No se encontró el vendedor.");
     }
 
-     //---------------------------------------------------------------------
-     
-     public static void listarVendedores() {
-        System.out.println("=== LISTADO DE VENDEDORES ===");
-        for (int i = 0; i < contadorVendedores; i++) {
-            Vendedores v = vendedores[i];
-            if (v != null) {
-                System.out.println(v.getCodigo() + " | " + v.getNombre() + 
-                                   " | Ventas confirmadas: " + v.getVentasCofirmadas());
+    public static Vendedores[] getVendedores() {
+        return vendedores;
+    }
+
+    public static int getCantidadVendedores() {
+        return contadorVendedores;
+    }
+
+    // ===============================================================
+    // GESTIÓN DE PRODUCTOS
+    // ===============================================================
+
+    public static void crearProducto(Producto nuevo) {
+        if (buscarProducto(nuevo.getCodigo()) == null) {
+            productos[contadorProductos++] = nuevo;
+            System.out.println("[OK] Producto " + nuevo.getNombre() + " agregado correctamente.");
+        } else {
+            System.out.println("[ERROR] Código de producto duplicado.");
+        }
+    }
+
+    public static Producto buscarProducto(String codigo) {
+        for (int i = 0; i < contadorProductos; i++) {
+            if (productos[i] != null && productos[i].getCodigo().equalsIgnoreCase(codigo)) {
+                return productos[i];
             }
         }
+        return null;
     }
-     
-     //------------------------------------------------------------------------
-     
-      public static void confirmarVenta(String codigo) {
-        Vendedores v = buscarVendedor(codigo);
-        if (v != null) {
-            v.confirmarVenta();
-            System.out.println("Venta confirmada para vendedor " + v.getNombre());
-        } else {
-            System.out.println("No se encontró el vendedor.");
+
+    public static void eliminarProducto(String codigo) {
+        for (int i = 0; i < contadorProductos; i++) {
+            if (productos[i] != null && productos[i].getCodigo().equalsIgnoreCase(codigo)) {
+                productos[i] = productos[contadorProductos - 1];
+                productos[contadorProductos - 1] = null;
+                contadorProductos--;
+                System.out.println("Producto eliminado correctamente.");
+                return;
+            }
+        }
+        System.out.println("No se encontró el producto.");
+    }
+
+    public static Producto[] getProductos() {
+        return productos;
+    }
+
+    public static int getCantidadProductos() {
+        return contadorProductos;
+    }
+
+    // ===============================================================
+    // MÉTODOS EXTRA (para guardar/cargar CSV en el futuro)
+    // ===============================================================
+
+    public static void limpiarProductos() {
+        for (int i = 0; i < contadorProductos; i++) {
+            productos[i] = null;
+        }
+        contadorProductos = 0;
+    }
+
+    public static void limpiarVendedores() {
+        for (int i = 0; i < contadorVendedores; i++) {
+            vendedores[i] = null;
+        }
+        contadorVendedores = 0;
+    }
+    //====================================
+    //==========Actualizar Vendedor=======
+    //====================================
+    public static void actualizarVendedor(String codigo, String nuevoNombre, String nuevaPassword) {
+    for (int i = 0; i < contadorVendedores; i++) {
+        if (vendedores[i] != null && vendedores[i].getCodigo().equalsIgnoreCase(codigo)) {
+
+            if (nuevoNombre != null && !nuevoNombre.isEmpty()) {
+                vendedores[i].setNombre(nuevoNombre);
+            }
+
+            if (nuevaPassword != null && !nuevaPassword.isEmpty()) {
+                vendedores[i].setPassword(nuevaPassword);
+            }
+
+            System.out.println("[OK] Vendedor actualizado: " + vendedores[i].getNombre());
+            return;
         }
     }
-      
-      //------------------------------------------------------------------------
-      public static Vendedores[] getVendedores() { return vendedores; }
-      public static int getCantidadVendedores() { return contadorVendedores; }
+
+    System.out.println("[ERROR] No se encontró un vendedor con el código: " + codigo);
+}
+
 }

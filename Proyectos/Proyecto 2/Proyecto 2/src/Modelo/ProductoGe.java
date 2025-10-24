@@ -11,10 +11,13 @@ package Modelo;
 public class ProductoGe extends Producto {
     private String material;
     
+    
     public ProductoGe(String codigo, String nombre, String material, String atributo,int stock){
         super(codigo, nombre, "General",atributo, stock);
         this.material=material;
+       
     }
+   
     public String getMaterial() { return material; }
     public void setMaterial(String material) { this.material = material; }
 

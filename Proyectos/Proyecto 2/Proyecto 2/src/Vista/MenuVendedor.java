@@ -19,12 +19,14 @@ public class MenuVendedor extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        JButton btnClientes = new JButton("Gestionar Clientes");
-        JButton btnStock = new JButton("Gestionar Stock");
-        JButton btnPedidos = new JButton("Gestionar Pedidos");
+        JButton btnClientes = new JButton("Clientes");
+        JButton btnStock = new JButton("Producto");
+        JButton btnPedidos = new JButton("Pedidos");
         JButton btnSalir = new JButton("Cerrar Sesión");
 
         btnClientes.addActionListener(e -> new VentanaClientes().setVisible(true));
+        btnStock.addActionListener(e -> new VentanaStock(vendedor).setVisible(true));
+        btnPedidos.addActionListener(e -> new VentanaPedidos(vendedor).setVisible(true));
         btnSalir.addActionListener(e -> { dispose(); new LoginFrame().setVisible(true); });
 
         setLayout(new GridLayout(4, 1, 10, 10));

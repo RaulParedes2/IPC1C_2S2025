@@ -21,7 +21,7 @@ public class Vendedores extends Usuario{
     public int getVentasCofirmadas(){
         return ventasConfirmadas;
     }
-    
+  
    
     //----------------------------------------------------------------------
     @Override

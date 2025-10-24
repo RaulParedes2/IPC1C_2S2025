@@ -19,7 +19,7 @@ public class VentanaProductos extends JFrame {
 
     public VentanaProductos() {
         setTitle("Gestión de Productos");
-        setSize(750, 600);
+        setSize(1000, 550);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
        
@@ -69,7 +69,7 @@ public class VentanaProductos extends JFrame {
         panelCampos.add(txtStock);
         panelCampos.add(txtAtributo);
 
-        JPanel panelBotones = new JPanel(new GridLayout(1, 7, 5, 5));
+        JPanel panelBotones = new JPanel(new GridLayout(1, 5, 5, 5));
         panelBotones.add(btnAgregar);
         panelBotones.add(btnModificar);
         panelBotones.add(btnEliminar);
@@ -125,8 +125,9 @@ public class VentanaProductos extends JFrame {
     }
 
     Producto nuevo = null;
-
+    //============================================
     // Crear producto según categoría seleccionada
+    //=============================================
     switch (categoria.toLowerCase()) {
         case "alimento":
             try {
@@ -141,7 +142,7 @@ public class VentanaProductos extends JFrame {
             break;
 
         case "general":
-            nuevo = new ProductoGe(codigo, nombre, atributo, "Material", stock);
+            nuevo = new ProductoGe(codigo, nombre,"Material",atributo, stock);
             break;
 
         case "tecnología":
@@ -221,12 +222,39 @@ public class VentanaProductos extends JFrame {
             JOptionPane.showMessageDialog(this, "Ingresa el código del producto a eliminar.");
             return;
         }
-
-        Productos.eliminarProducto(codigo);
-        JOptionPane.showMessageDialog(this, " Producto eliminado y lista reordenada.");
-        limpiarCampos();
+        
+        // Verificar si el producto existe antes de intentar eliminarlo
+    Producto producto = Productos.buscarProducto(codigo);
+    if (producto == null) {
+        JOptionPane.showMessageDialog(this, "No se encontró ningún producto con ese código.");
+        return;
     }
 
+    // Mostrar cuadro de confirmación
+    int confirmacion = JOptionPane.showConfirmDialog(
+            this,
+            "¿Estás seguro de eliminar el producto?\n\n" +
+            "Código: " + producto.getCodigo() + "\n" +
+            "Nombre: " + producto.getNombre() + "\n" +
+            "Categoría: " + producto.getCategoria(),
+            "Confirmar eliminación",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE
+    );
+
+    if (confirmacion == JOptionPane.YES_OPTION) {
+        Productos.eliminarProducto(codigo);
+        JOptionPane.showMessageDialog(this, "Producto eliminado correctamente (lista reordenada).");
+        limpiarCampos();
+    } else {
+        JOptionPane.showMessageDialog(this, "Operación cancelada.");
+    }
+}
+       /* Productos.eliminarProducto(codigo);
+        JOptionPane.showMessageDialog(this, " Producto eliminado y lista reordenada.");
+        limpiarCampos();
+        }
+        */
     // ===============================================================
     // LISTAR
     // ===============================================================

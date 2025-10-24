@@ -7,11 +7,17 @@ package Vista;
 import Controlador.*;
 import Modelo.*;
 import javax.swing.*;
+import javax.swing.JOptionPane;
+
 import java.awt.*;
 import java.io.*;
 
+import org.jfree.chart.*;
+import org.jfree.data.category.DefaultCategoryDataset;
+
 public class VentanaVendedores extends JFrame {
 
+    private JPanel jPanelGrafica;
     private JTextField txtCodigo, txtNombre, txtGenero, txtPassword;
     private JComboBox<String> comboGenero;
     private JButton btnAgregar, btnActualizar, btnEliminar, btnListar, btnTop, btnCargarCSV, btnGuardarCSV;
@@ -19,9 +25,14 @@ public class VentanaVendedores extends JFrame {
 
     public VentanaVendedores() {
         setTitle("Gestión de Vendedores");
-        setSize(700, 550);
+        setSize(700, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
+         // Panel para la gráfica
+        jPanelGrafica = new JPanel();
+        jPanelGrafica.setPreferredSize(new Dimension(600, 300));
+        add(jPanelGrafica, BorderLayout.NORTH);
 
         // ====== Campos de texto ======
         txtCodigo = new JTextField();
@@ -37,6 +48,7 @@ public class VentanaVendedores extends JFrame {
         comboGenero.setBorder(BorderFactory.createTitledBorder("Género"));
 
         // ====== Botones ======
+     
         btnAgregar = new JButton("Agregar");
         btnActualizar = new JButton("Actualizar");
         btnEliminar = new JButton("Eliminar");
@@ -114,9 +126,12 @@ public class VentanaVendedores extends JFrame {
         Vendedor.crearVendedor(v);
         JOptionPane.showMessageDialog(this, "Vendedor agregado correctamente.");
         limpiarCampos();
-    }
+        mostrarGraficaTop3EnPanel();
+    }   
+        //================================================
         //===== Actualizacion de Datos o modificacion======
-    private void actualizarVendedor() {
+        //================================================
+        private void actualizarVendedor() {
         String codigo = txtCodigo.getText().trim();
         String nuevoNombre = txtNombre.getText().trim();
         String nuevaPassword = txtPassword.getText().trim();
@@ -125,25 +140,52 @@ public class VentanaVendedores extends JFrame {
             JOptionPane.showMessageDialog(this, "Ingresa el código del vendedor a actualizar.");
             return;
         }
+        
+        if (codigo.isEmpty() || nuevoNombre.isEmpty() ||nuevaPassword.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, llena todos los campos.");
+            return;
+        }
 
         Vendedor.actualizarVendedor(codigo, nuevoNombre, nuevaPassword);
         JOptionPane.showMessageDialog(this, "Datos del vendedor actualizados.");
         limpiarCampos();
+        
+        mostrarGraficaTop3EnPanel();
     }
+        //=======================================
         //==== Eliminar vendedor ========
-    private void eliminarVendedor() {
+        //========================================
+         private void eliminarVendedor() {
         String codigo = txtCodigo.getText().trim();
 
         if (codigo.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Ingresa el código del vendedor a eliminar.");
             return;
         }
+        
+        // Mostrar cuadro de confirmación
+    int confirmacion = JOptionPane.showConfirmDialog(
+            this,
+            "¿Estás seguro de eliminar al vendedor con código: " + codigo + "?",
+            "Confirmar eliminación",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE
+    );
 
+    // Si el usuario presiona "Sí"
+    if (confirmacion == JOptionPane.YES_OPTION) {
         Vendedor.eliminarVendedor(codigo);
-        JOptionPane.showMessageDialog(this, "Vendedor eliminado (lista reordenada).");
+        JOptionPane.showMessageDialog(this, "Vendedor eliminado correctamente (lista reordenada).");
         limpiarCampos();
+    } else {
+        JOptionPane.showMessageDialog(this, "Operación cancelada.");
     }
+    mostrarGraficaTop3EnPanel();
+}
+
+    //=============================================
     //======Listado de Vendedores registrados======
+    //============================================
     private void listarVendedores() {
         txtSalida.setText("");
         Vendedores[] lista =Vendedor.getVendedores();
@@ -163,8 +205,9 @@ public class VentanaVendedores extends JFrame {
                              " | Ventas: " +  v.getVentasCofirmadas() + "\n");
         }
     }
-    
+    //==================================
     //==== Top de los vendedores=====
+    //==================================
     
     private void mostrarTop3() {
         txtSalida.setText("=== TOP 3 VENDEDORES ===\n");
@@ -199,7 +242,51 @@ public class VentanaVendedores extends JFrame {
         }
     }
     
+    private void mostrarGraficaTop3EnPanel() {
+    Vendedores[] lista = Vendedor.getVendedores();
+    int total = Vendedor.getCantidadVendedores();
+
+    if (total == 0) {
+        jPanelGrafica.removeAll();
+        jPanelGrafica.repaint();
+        return;
+    }
+
+    // Copiar y ordenar descendente
+    Vendedores[] copia = new Vendedores[total];
+    for (int i = 0; i < total; i++) copia[i] = lista[i];
+    for (int i = 0; i < total - 1; i++) {
+        for (int j = 0; j < total - 1 - i; j++) {
+            if (copia[j].getVentasCofirmadas() < copia[j + 1].getVentasCofirmadas()) {
+                Vendedores temp = copia[j];
+                copia[j] = copia[j + 1];
+                copia[j + 1] = temp;
+            }
+        }
+    }
+
+    // Crear dataset
+    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+    int limite = Math.min(3, total);
+    for (int i = 0; i < limite; i++) {
+        dataset.addValue(copia[i].getVentasCofirmadas(), "Ventas Confirmadas", copia[i].getNombre());
+    }
+
+    // Crear gráfico
+    JFreeChart chart = ChartFactory.createBarChart(
+            "Top 3 Vendedores", "Vendedor", "Ventas", dataset
+    );
+
+    // Mostrar en el panel
+    ChartPanel chartPanel = new ChartPanel(chart);
+    jPanelGrafica.removeAll();
+    jPanelGrafica.setLayout(new java.awt.BorderLayout());
+    jPanelGrafica.add(chartPanel, java.awt.BorderLayout.CENTER);
+    jPanelGrafica.validate();
+}
+    //=====================================
     //==== Boton de cargar desde CSV ======
+    //=====================================
     
     private void cargarCSV() {
         File archivo = new File("src/data/vendedores.csv");

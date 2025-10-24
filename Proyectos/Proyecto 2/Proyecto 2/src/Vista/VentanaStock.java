@@ -11,7 +11,7 @@ import java.awt.*;
 
 public class VentanaStock extends JFrame {
 
-    private Vendedores vendedor;
+    private Vendedores vendedor; // tu modelo individual
     private JTextField txtCodigoProducto, txtCantidad;
     private JTextArea txtSalida;
 
@@ -21,6 +21,7 @@ public class VentanaStock extends JFrame {
         setTitle("Gestión de Stock - " + vendedor.getNombre());
         setSize(500, 400);
         setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         txtCodigoProducto = new JTextField();
         txtCantidad = new JTextField();
@@ -34,23 +35,42 @@ public class VentanaStock extends JFrame {
         txtSalida.setEditable(false);
         JScrollPane scroll = new JScrollPane(txtSalida);
 
+        // --- Acción: Agregar stock ---
         btnAgregar.addActionListener(e -> {
-            String codigo = txtCodigoProducto.getText();
-            int cantidad = Integer.parseInt(txtCantidad.getText());
-            Producto p = Productos.buscarProducto(codigo);
-            if (p != null) {
-                p.agregarStock(cantidad);
-                vendedor.confirmarVenta(); // opcional, si se quiere contar ingreso como venta
-                JOptionPane.showMessageDialog(this, "Stock agregado correctamente.");
-            } else {
-                JOptionPane.showMessageDialog(this, "Producto no encontrado.");
+            String codigo = txtCodigoProducto.getText().trim();
+            String cantidadTexto = txtCantidad.getText().trim();
+
+            if (codigo.isEmpty() || cantidadTexto.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Por favor, llena ambos campos.");
+                return;
+            }
+
+            try {
+                int cantidad = Integer.parseInt(cantidadTexto);
+                if (cantidad <= 0) {
+                    JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor que 0.");
+                    return;
+                }
+
+                Producto p = Vendedor.buscarProducto(codigo); // tu controlador
+                if (p != null) {
+                    p.agregarStock(cantidad);
+                    vendedor.confirmarVenta(); // si quieres registrar venta
+                    JOptionPane.showMessageDialog(this, "Stock agregado correctamente.");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Producto no encontrado.");
+                }
+
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Cantidad inválida. Ingresa un número entero.");
             }
         });
 
+        // --- Acción: Ver inventario ---
         btnVer.addActionListener(e -> {
             txtSalida.setText("");
-            Producto[] lista = Productos.getProductos();
-            for (int i = 0; i < Productos.getCantidadProductos(); i++) {
+            Producto[] lista = Vendedor.getProductos(); // del controlador
+            for (int i = 0; i < Vendedor.getCantidadProductos(); i++) {
                 txtSalida.append(lista[i].toString() + "\n");
             }
         });
@@ -65,4 +85,3 @@ public class VentanaStock extends JFrame {
         add(scroll, BorderLayout.CENTER);
     }
 }
-

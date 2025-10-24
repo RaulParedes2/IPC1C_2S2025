@@ -59,7 +59,7 @@ public class Clientes {
         for (int i = 0; i < contadorClientes; i++) {
             Cliente c = clientes[i];
             if (c != null) {
-                System.out.println(c.getCodigo() + " | " + c.getNombre());
+                System.out.println(c.getCodigo() + " | " + c.getNombre()+"|"+c.getgenero()+"|"+c.getCumpleaños());
             }
         }
     }
