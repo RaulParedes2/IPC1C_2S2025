@@ -19,7 +19,7 @@ public class DatosSistema {
     private Vendedores vendedor;
     private static final String RUTA_PRODUCTOS = "src/main/resources/data/productos.csv";
     private static final String RUTA_VENDEDORES = "src/main/resources/data/vendedores.csv";
-    private static final String RUTA_CLIENTES = "ssrc/main/resources/data/clientes.csv";
+    private static final String RUTA_CLIENTES = "src/main/resources/data/clientes.csv";
     private static final String RUTA_HISTORIAL = "src/main/resources/data/historial_stock.csv";
    
 

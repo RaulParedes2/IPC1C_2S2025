@@ -1,3 +1,4 @@
 Fecha,CódigoCliente,CódigoProducto,NombreProducto,Cantidad,Vendedor,PrecioUnitario,Total
 26/10/2025,C011,PRG001,Camisa,6,Jose,205.00,1230.00
 26/10/2025,C011,PRT001,Mosue,2,Jose,75.00,150.00
+26/10/2025,C001,PRG001,Camisa,20,Pao,100.00,2000.00

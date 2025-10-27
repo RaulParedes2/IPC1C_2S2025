@@ -183,37 +183,7 @@ public class Pedidos {
         }
     }
 
-// ============================================================
-//  Registrar compra en historial_compras.csv
-// ============================================================
-   /* private static void registrarHistorialCompra(Pedido pedido, Vendedores vendedor) {
-        File archivo = new File("src/data/historial_compras.csv");
-        boolean archivoNuevo = !archivo.exists();
 
-        try (PrintWriter pw = new PrintWriter(new FileWriter(archivo, true))) {
-            if (archivoNuevo) {
-                pw.println("Fecha,CódigoCliente,CódigoProducto,NombreProducto,Cantidad,Vendedor,PrecioUnitario,Total");
-            }
-
-            java.time.LocalDate fecha = java.time.LocalDate.now();
-            java.time.format.DateTimeFormatter formato = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-            double precioUnitario = pedido.getProducto().getPrecio();
-            double totalCompra = pedido.getCantidad() * precioUnitario;
-
-            pw.println(formato.format(fecha) + ","
-                    + pedido.getCliente().getCodigo() + ","
-                    + pedido.getProducto().getCodigo() + ","
-                    + pedido.getProducto().getNombre() + ","
-                    + pedido.getCantidad() + ","
-                    + vendedor.getNombre() + ","
-                    + String.format("%.2f", precioUnitario) + ","
-                    + String.format("%.2f", totalCompra));
-        } catch (IOException e) {
-            System.out.println("Error al registrar historial de compras: " + e.getMessage());
-        }
-    }
-*/
     // ================================================================
     // Eliminar pedido confirmado
     // ================================================================

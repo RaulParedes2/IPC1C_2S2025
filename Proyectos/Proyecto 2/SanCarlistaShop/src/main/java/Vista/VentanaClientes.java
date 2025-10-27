@@ -245,7 +245,7 @@ public class VentanaClientes extends JFrame {
     //==== Boton de cargar desde CSV ======
     //=====================================
     private void cargarCSV() {
-        File archivo = new File("src/main/resources/data/.csv");
+        File archivo = new File("src/main/resources/data/clientes.csv");
         int cargados = 0, errores = 0;
         DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 

@@ -117,12 +117,12 @@ public class Productos {
 
     public static void guardarStock() {
         try (PrintWriter pw = new PrintWriter(new FileWriter(RUTA_STOCK))) {
-            pw.println("Codigo,Stock,Precio"); // 💡 Agregar encabezado para mantener formato CSV
+            pw.println("Codigo,Stock,Precio"); // Agregar encabezado para mantener formato CSV
 
             for (int i = 0; i < contadorProductos; i++) {
                 Producto p = productos[i];
                 if (p != null) {
-                    // 💡 Evita precios nulos o reiniciados
+                    //  Evita precios nulos o reiniciados
                     double precioSeguro = p.getPrecio() > 0 ? p.getPrecio() : 0.01;
                     pw.println(p.getCodigo() + "," + p.getStock() + "," + precioSeguro);
                 }

@@ -329,7 +329,7 @@ public class VentanaStock extends JFrame {
     private void mostrarInventario() {
         txtSalida.setText("===== INVENTARIO ACTUAL =====\n");
 
-        String ruta = "src/data/stock.csv";
+        String ruta = "src/main/resources/data/stock.csv";
         String linea;
 
         try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
